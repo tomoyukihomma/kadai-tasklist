@@ -1,8 +1,10 @@
 <h1>タスク一覧</h1>
 
 <ul>
+  <% if @tasks.present? %>
   <% @tasks.each do |task| %>
     <li><%= link_to task.id, task %> : <%= task.status %> &gt; <%= task.content %></li>
+  <% end %>
   <% end %>
 </ul>
 

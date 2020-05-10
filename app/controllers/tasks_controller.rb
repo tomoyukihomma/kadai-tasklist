@@ -1,12 +1,18 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
-  before_action :correct_user
+  before_action :correct_user, only: [:show, :edit]
   
+  def index
+    @task = current_user.tasks.build
+    @tasks = current_user.tasks.order(id: :desc)
+  end
+
   def show
+    @task = current_user.find(params[:id])
   end
   
   def new
-    @task = Task.new
+    @task =current_user.tasks.new
   end
     
   def create
@@ -19,6 +25,10 @@ class TasksController < ApplicationController
       flash.now[:danger] = 'タスクの投稿に失敗しました。'
       render :new
     end
+  end
+  
+  def edit
+    @task = current_user.tasks.find(params[:id])
   end
 
   def destroy

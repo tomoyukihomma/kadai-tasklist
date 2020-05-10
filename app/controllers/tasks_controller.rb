@@ -2,6 +2,13 @@ class TasksController < ApplicationController
   before_action :require_user_logged_in
   before_action :correct_user
   
+  def index
+    if logged_in?
+      @task = current_user.tasks.build
+      @tasks = current_user.feed_tasks.order(id: :desc)
+    end
+  end
+
   def show
   end
   

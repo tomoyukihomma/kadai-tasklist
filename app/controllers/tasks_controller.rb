@@ -3,8 +3,15 @@ class TasksController < ApplicationController
   before_action :correct_user, only: [:show, :edit]
   
   def index
+<<<<<<< HEAD
     @task = current_user.tasks.build
     @tasks = current_user.tasks.order(id: :desc)
+=======
+    if logged_in?
+      @task = current_user.tasks.build
+      @tasks = current_user.feed_tasks.order(id: :desc)
+    end
+>>>>>>> 4b58fa6cfa5d54acaa0706097ff0faad878eb668
   end
 
   def show

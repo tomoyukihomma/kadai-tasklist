@@ -1,20 +1,12 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
-  before_action :correct_user, only: [:show, :edit]
+  before_action :correct_user, only: [:edit, :show]
   
   def index
     @task = current_user.tasks.build
     @tasks = current_user.tasks.order(id: :desc)
   end
 
-  def show
-    @task = current_user.find(params[:id])
-  end
-  
-  def new
-    @task =current_user.tasks.new
-  end
-    
   def create
     @task = current_user.tasks.build(task_params)
     if @task.save
@@ -27,14 +19,36 @@ class TasksController < ApplicationController
     end
   end
   
+  def new
+    @task =current_user.tasks.new
+  end
+  
   def edit
     @task = current_user.tasks.find(params[:id])
   end
+  
+  def show
+    @task = current_user.tasks.find(params[:id])
+  end
+
+  def update
+    @task = Task.find(params[:id])
+
+    if @task.update(task_params)
+      flash[:success] = 'Task は正常に更新されました'
+      redirect_to @task
+    else
+      flash.now[:danger] ='Task は更新されませんでした'
+      render :edit
+    end
+  end
 
   def destroy
+    @task = Task.find(params[:id])
     @task.destroy
-    flash[:success] = 'タスクを削除しました。'
-    redirect_back(fallback_location: root_path)
+
+    flash[:success] = 'Task は正常に削除されました'
+    redirect_to tasks_url
   end
 
   private
